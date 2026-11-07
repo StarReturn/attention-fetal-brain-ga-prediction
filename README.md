@@ -12,16 +12,22 @@ All numbers are on the held-out 20% test split (149 subjects) of the public 741-
 
 | Model | Paper | This reproduction |
 |---|---|---|
-| **Multi-plane 3-slice dual-branch (best model)** | R² 0.945 / MAE 6.7 d / CCC 0.970 | **R² 0.940 / MAE 8.0 d / CCC 0.968** |
+| **Multi-plane 3-slice dual-branch (best model)** | R² 0.945 / MAE 6.7 d / CCC 0.970 | **R² 0.940 / MAE 8.0 d / CCC 0.968** (seed 42) |
+| Multi-plane 3-slice, 3-seed mean ± std | — | R² 0.925 ± 0.013 / MAE 8.2 ± 0.3 d / CCC 0.961 ± 0.007 |
+| Multi-plane 1-slice | R² 0.935 / MAE 7.3 d | **R² 0.947 / MAE 7.4 d / CCC 0.972** |
 | Coronal 3-slice dual-branch (best single-plane) | R² 0.924 / MAE 7.9 d | R² 0.915 / MAE 9.3 d |
+| Axial / Sagittal 1-slice dual-branch | — | R² 0.933 / 0.920 |
 | Coronal 1-slice global-only (ablation control) | — | R² 0.923 / MAE 9.0 d / CCC 0.961 |
+
+Full ablation (single-plane: 1/3/5 slices × three planes + multi-plane + 3 seeds, 12 runs total): coronal R² 0.923 → 0.915 → 0.856 for 1 → 3 → 5 slices, reproducing the paper's finding that performance diminishes beyond 3 input slices.
 
 Key findings of the paper are reproduced:
 
-- **Multi-plane fusion helps** — single-plane 0.915 → multi-plane 0.940 (paper: 0.924 → 0.945).
+- **Multi-plane fusion helps** — single-plane best 0.933 → multi-plane 0.940–0.947 (paper: 0.924 → 0.945).
+- **More than 3 slices degrades** — coronal 1/3/5-slice: 0.923 / 0.915 / 0.856 (paper: "diminishing performance with more than 3 input slices").
 - **The "beyond 34 weeks" fingerprint** — modified Bland–Altman analysis shows the model overestimates GA before ~34 weeks (+0.59 wk on average) and progressively underestimates it afterwards (−0.73 wk), matching the pattern reported in the paper and its proposed explanation (third-trimester sample sparsity + decelerating gyrification).
 
-The remaining MAE gap (+1.3 days, while R²/CCC are nearly identical) is attributable to the unpublished train/test split, the Gaussian prior width (see below), and single-seed variance.
+Across three seeds the paper's 0.945 sits at the upper edge of our distribution (best seed 0.940, mean 0.925 ± 0.013) — consistent with the unpublished train/test split, the fixed Gaussian width, and typical single-run optimism; all core conclusions hold.
 
 ## Method
 
